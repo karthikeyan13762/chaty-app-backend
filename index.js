@@ -12,7 +12,24 @@ const app = express();
 
 require("dotenv").config();
 
-app.use(cors());
+const allowedOrigins = ["https://chaty-app-8.netlify.app"];
+
+// Configure CORS
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests from the specific origin or from no origin (for testing purposes)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
